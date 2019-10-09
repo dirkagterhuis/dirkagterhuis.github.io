@@ -1,23 +1,6 @@
 @charset "UTF-8";
 
-.container {
-	height: 200px;
-	position: relative;
-	border: 3px fuchsia;
-  }
-
-.content {
-	margin: 0;
-	position: absolute;
-	text-align: center;
-	padding: 10px;
-	top: 50%;
-	left: 50%;
-	-ms-transform: translate(-50%, -50%);
-	transform: translate(-50%, -50%);
-  }
-
-  .backup {
+  .content {
 	max-width: 500px;
 	margin: auto;
 	border: 3px fuchsia;
