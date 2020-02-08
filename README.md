@@ -1,1 +1,1 @@
-Read me yourself
+Go read yourself
