@@ -8,12 +8,14 @@
     </head>
 
     <body>
+        <div w3-include-html="header.html"></div>
         <div class="main-content">
-            {{>header}}
             <img class="portrait" src="/img/me.jpg">
         </div>
-
-        {{>footer}}
+        <div w3-include-html="footer.html"></div>
     </body>
-
+    <script src="../js/includeHTML.js"></script>
+    <script>
+        includeHTML();
+    </script>
 </html>

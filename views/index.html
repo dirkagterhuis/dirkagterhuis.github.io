@@ -2,23 +2,21 @@
 
 <html>
     <head>
-        <title>Weather</title>
+        <title>dirkagterhuis.dev</title>
         <link rel="icon" href="/img/weather.png">
         <link rel="stylesheet" href="/css/styles.css">
-        <script src="/js/app.js"></script>
     </head>
 
     <body>
-        <p>yeps</p>
         <div w3-include-html="header.html"></div>
-        <div w3-include-html="footer.html"></div>
-        <div class="main-content">
-            {{>header}}
-        
-            <p>Use this site to get your weather!</p>
+        <div class="main-content">            
+            <p>Here's some awesome content!</p>
         </div>
-
-        {{>footer}}
+        <div w3-include-html="footer.html"></div>
     </body>
 
+    <script src="../js/includeHTML.js"></script>
+    <script>
+        includeHTML();
+    </script>
 </html>
