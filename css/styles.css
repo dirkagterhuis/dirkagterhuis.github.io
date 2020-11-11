@@ -9,7 +9,7 @@ img {
 body {
     color: #333333;
     font-family: arial;
-    max-width: 650px;
+    max-width: device-width;
     margin: 0 auto; /*0: margin on top, bottom, auto: margin left/right*/
     padding: 0 16px;
     display: flex;
@@ -26,22 +26,26 @@ footer {
     border-top: 1px solid #eeeeee;
     margin-top: 16px;
     padding: 16px 0;
+    text-align: center;
 }
 
 header {
     margin-top: 16px;
     margin-bottom: 48px;
+    text-align: center;
 }
 
 h1 {
-    font-size: 64px;
+    font-size: 10vw;
     margin-bottom: 16px;
+    text-align: center;
 }
 
 header a {
     color: #888888;
-    margin-right: 16px;
+    /* margin-right: 16px; */
     text-decoration: none;
+    text-align: center;
 }
 
 .portrait {
