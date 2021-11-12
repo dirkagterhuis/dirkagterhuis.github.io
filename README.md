@@ -3,6 +3,7 @@
 - [X] Added local-web-server as package dependency
 - [ ] Spotify-app
     - [ ] Use Github secrets to manage spotify app secrets. Test overriding them in local. 
+        - [ ] Make sure this is safe: that you can't see it from the client side. First check if this is even at all possible, or desired.
     - [ ] Use Spotify OAuth flow. Store stuff on client side.
     - [ ] Retrieve playlists by user id
     - [ ] Give back a json or csv. 
