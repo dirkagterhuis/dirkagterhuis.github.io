@@ -28,6 +28,10 @@
         onclick="document.getElementById('demo').innerHTML = Date()">
         Eventually this will authorize your spotify account. Now it only shows the current DateTime.
         </button>
+        <button type="button"
+            onclick="startAuth()">
+            Start authorization
+        </button>
 
         <p id="demo"></p>
 
@@ -48,5 +52,6 @@
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
         <script src="../public/js/includeHTML.js"></script>
         <script> includeHTML(); </script>
+        <script type="text/javascript" src="src/authorization.js"></script>
     </body>
 </html>
