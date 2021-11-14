@@ -14,6 +14,7 @@
     - [ ] Give back a json or csv. 
 - [ ] Use menu button for navigation
 - [ ] Something to track traffic
+- [ ] Make something to turn .md blogs into content
 
 # How to
 
