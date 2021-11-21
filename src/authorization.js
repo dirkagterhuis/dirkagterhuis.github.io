@@ -1,30 +1,28 @@
-// import { clientId } from './secrets'
-// import { Express } from 'express'
+import { config } from '../config'
+import { Express } from 'express'
 
-// const spotifyClientId = process.env.SPOTIFY_APP_CLIENT_ID
-//     ? process.env.SPOTIFY_CLIENT_ID
-//     : localSpotifyAppClientId
-const spotifyClientId = 'dd79131036984f2a9bed15ced3265646'
-const state = '555666777' // generateRandomString(16) // TO DO: make this random, e.g. https://stackoverflow.com/questions/1349404/generate-random-string-characters-in-javascript
+const state = generateRandomString(16)
 const scope = 'playlist-read-private'
-const redirect_uri = 'http://localhost:8000/views/spotify-app.html'
+const redirect_uri = 'http://localhost:8000/views/spotify-app.html' //TODO: make this dependent on environment
 
-// var app = express()
+var app = express()
 
-// function startAuth() {
-//     app.get('/login', function (req, res) {
-//         res.redirect(
-//             'https://accounts.spotify.com/authorize?' +
-//                 querystring.stringify({
-//                     response_type: 'code',
-//                     client_id: spotifyClientId,
-//                     scope: scope,
-//                     redirect_uri: redirect_uri,
-//                     state: state,
-//                 })
-//         )
-//     })
-// }
+function startAuth() {
+    app.get('/login', function (req, res) {
+        res.redirect(
+            'https://accounts.spotify.com/authorize?' +
+                querystring.stringify({
+                    response_type: 'code',
+                    client_id: config.spotifyClientId,
+                    scope: scope,
+                    redirect_uri: redirect_uri,
+                    state: state,
+                    code_challenge_method: 'S256',
+                    code_challenge: codeChallenge,
+                })
+        )
+    })
+}
 
 async function startAuthFromClient() {
     // prettier-ignore
@@ -46,6 +44,36 @@ async function startAuthFromClient() {
     })
     const result = await response.json() //extract JSON from the http response
     console.log(result)
+}
+
+export async function startAuth() {
+    app.get('/callback', function (req, res) {
+        var code = req.query.code || null
+        var state = req.query.state || null
+
+        if (state === null) {
+            res.redirect(
+                '/#' +
+                    querystring.stringify({
+                        error: 'state_mismatch',
+                    })
+            )
+        } else {
+            var authOptions = {
+                url: 'https://accounts.spotify.com/api/token',
+                form: {
+                    code: code,
+                    redirect_uri: redirect_uri,
+                    grant_type: 'authorization_code',
+                },
+                headers: {
+                    Authorization:
+                        'Basic ' + new Buffer(client_id + ':' + client_secret).toString('base64'),
+                },
+                json: true,
+            }
+        }
+    })
 }
 
 function sha256(plain) {

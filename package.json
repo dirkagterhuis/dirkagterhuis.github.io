@@ -1,7 +1,7 @@
 {
   "main": "index.js",
   "scripts": {
-    "start": "ws",
+    "start:server": "ws",
     "dev": "nodemon index.js"
   },
   "dependencies": {
@@ -10,6 +10,7 @@
     "glob-parent": ">=5.1.2",
     "ini": ">=1.3.6",
     "jquery": "^3.5.1",
+    "js-yaml": "^4.1.0",
     "node": "^12.12.0",
     "nodemon": "^2.0.6",
     "normalize-url": ">=4.5.1",
@@ -18,5 +19,6 @@
   },
   "devDependencies": {
     "local-web-server": "^5.1.1"
-  }
+  },
+  "type": "module"
 }

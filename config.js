@@ -1,5 +1,16 @@
+import fs from 'fs'
+import yaml from 'js-yaml'
+
+let localConfig
+try {
+    localConfig = yaml.load(fs.readFileSync('./local.yml', 'utf8'))
+} catch (e) {
+    console.log(e)
+}
+
 export const config = {
-    env = process.env.NODE_ENV || 'dev',
-    localSpotifyAppClientId: 'ADD_SPOTIFY_APP_CLIENT_ID_HERE',
-    localSpotifyAppClientSecret: 'ADD_SPOTIFY_APP_CLIENT_SECRET_HERE',
+    env: process.env.NODE_ENV || 'dev',
+    spotifyClientId: process.env.SPOTIFY_APP_CLIENT_ID || localConfig.localSpotifyAppClientId,
+    spotifyClientSecret:
+        process.env.SPOTIFY_APP_CLIENT_SECRET || localConfig.localSpotifyAppClientSecret,
 }
