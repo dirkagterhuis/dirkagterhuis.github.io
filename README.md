@@ -4,6 +4,8 @@
 - [ ] Spotify-app
     - General: it's beginning to get awkward to try and to this without a node.js server running, but only from the client. 
       - --> it's so much easier this way. I think. Try and deploy this app in aws or heroku, but keep your front end: redirect to aws. 
+    - [ ] AWS
+      - [ ] To budget, add action to shutdown EC2 instance when budget is reached.
     - [ ] Authorization
         - [ ] Use Github secrets to manage spotify app secrets. Test overriding them in local. 
             - [ ] Make sure this is safe: that you can't see it from the client side. First check if this is even at all possible, or desired.
