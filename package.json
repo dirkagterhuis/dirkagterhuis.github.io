@@ -1,8 +1,8 @@
 {
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
     "start:server": "ws",
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.ts --ext .js,.ts,.html,.json"
   },
   "dependencies": {
     "bootstrap": "^4.3.1",
@@ -12,13 +12,16 @@
     "jquery": "^3.5.1",
     "js-yaml": "^4.1.0",
     "node": "^12.12.0",
-    "nodemon": "^2.0.6",
+    "nodemon": "^2.0.15",
     "normalize-url": ">=4.5.1",
     "popper.js": "^1.16.0",
-    "request": "^2.88.0"
+    "request": "^2.65.0",
+    "ts-node": "^10.4.0",
+    "typescript": "^4.5.2"
   },
   "devDependencies": {
+    "@types/express": "^4.17.13",
+    "@types/node": "^16.11.10",
     "local-web-server": "^5.1.1"
-  },
-  "type": "module"
+  }
 }

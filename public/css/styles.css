@@ -1,16 +1,8 @@
-/*start version: 
-h1 {
-    color: grey;
-}
-
-img {
-    width: 250px;
-}*/
 body {
     color: #333333;
     font-family: arial;
     max-width: device-width;
-    margin: 0 auto; /*0: margin on top, bottom, auto: margin left/right*/
+    margin: 0 auto;
     padding: 0 16px;
     display: flex;
     flex-direction: column;
@@ -45,7 +37,6 @@ h1 {
 
 header a {
     color: #888888;
-    /* margin-right: 16px; */
     text-decoration: none;
     text-align: center;
 }
