@@ -3,29 +3,37 @@ import path from 'path'
 // import { startAuth } from './src/authorization.js'
 
 const app = express()
-console.log('dirname: ' + __dirname)
 const port = process.env.PORT || 8000
 
-const publicDirectoryPath = path.join(__dirname, './public')
-console.log('__dirname: ' + __dirname)
-console.log('publicDirectoryPath: ' + publicDirectoryPath)
-// const viewsPath = path.join(__dirname, '../views'); //used to implement a directory other than '../views'
+// Here you might have to setup a view engine if you want to do something else rather than only serve static content.
+// If you do that, do use the `index.html` in root, not in `/public`
+// app.set('views', path.join(__dirname, '../views')) //used to implement a directory other than '../views'
 
-// Setup handlebars enginer and views location
-// app.set('views', viewsPath)
+// Setup static directory to serve
+app.use(express.static(path.join(__dirname, './public')))
 
-// Setup static directory to serve 
-app.use(express.static(publicDirectoryPath));
-
-// app.get('/', (req, res) => {
-//     res.render('index', {
-//         title: 'Weather.',
-//         name: 'Dirk Agterhuis'
-//     })
-// });
-console.log('path: ' + path.join(__dirname + '/index.html'))
 app.get('/', function (req, res) {
-    res.sendFile(path.join(__dirname + '/index.html'))
+    res.sendFile(path.join(__dirname + '/public/views/index.html'))
+})
+
+app.get('/spotify-app', function (req, res) {
+    res.sendFile(path.join(__dirname + '/public/views/spotify-app.html'))
+})
+
+app.get('/weather-app', function (req, res) {
+    res.sendFile(path.join(__dirname + '/public/views/weather-app.html'))
+})
+
+app.get('/chat-app', function (req, res) {
+    res.sendFile(path.join(__dirname + '/public/views/chat-app.html'))
+})
+
+app.get('/about', function (req, res) {
+    res.sendFile(path.join(__dirname + '/public/views/about.html'))
+})
+
+app.get('/help', function (req, res) {
+    res.sendFile(path.join(__dirname + '/public/views/help.html'))
 })
 
 app.listen(port, () => {

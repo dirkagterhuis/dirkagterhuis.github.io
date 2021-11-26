@@ -1,7 +1,6 @@
 {
   "main": "index.ts",
   "scripts": {
-    "start:server": "ws",
     "dev": "nodemon index.ts --ext .js,.ts,.html,.json"
   },
   "dependencies": {
@@ -21,7 +20,6 @@
   },
   "devDependencies": {
     "@types/express": "^4.17.13",
-    "@types/node": "^16.11.10",
-    "local-web-server": "^5.1.1"
+    "@types/node": "^16.11.10"
   }
 }
