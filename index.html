@@ -1,17 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
-    <!-- This file is here to support a static website. It embeds `./public/views/index.html` -->
     <head>
         <!-- Required meta tags -->
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="icon" href="./public/img/weather.png" />
+        <link rel="icon" href="./img/weather.png" />
         <link rel="stylesheet" type="text/css" href="./public/css/styles.css" />
     </head>
     <body>
-        <div w3-include-html="./public/views/index.html"></div>
+        <div w3-include-html="./public/views/header-static.html"></div>
+        <div class="main-content">
+            <p>
+                Welcome to my website! One day, here you'll find a Spotify web
+                app and a weather app.
+            </p>
+            <p>
+                This site is 'temporarily' under construction, so if you'll open one of the other parts, the styling will disappear. Sorry human.
+            </p>
+            <p>
+                Kind reminder: you're in `~/index.html`. This is just a development message, which you as a kind visitor may just ignore.
+            </p>
+        </div>
+        <div w3-include-html="./public/views/footer.html"></div>
     </body>
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <!-- For mobile friendly: jQuery first, then Popper.js, then Bootstrap JS -->
     <script
         src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
@@ -27,7 +39,7 @@
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"
     ></script>
-    <!-- includeHTML is to embed / include other html pages here -->
+    <!-- To embed other html pages -->
     <script src="./public/js/includeHTML.js"></script>
     <script>
         includeHTML();
