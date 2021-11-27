@@ -4,7 +4,7 @@
     - [ ] Authorization
       - [X] Implement proper secret management with local variables
       - [ ] Use Spotify [OAuth flow with PKCE extension](https://developer.spotify.com/documentation/general/guides/authorization/code-flow/) for web apps: that way you don't have to reveal the secret, only the client id. 
-        - [ ] **// Hier gebleven.** Next: get code after auth, then get token: https://developer.spotify.com/documentation/general/guides/authorization/code-flow/
+        - [ ] **// Hier gebleven.** On button click, get redirected to spotify auth flow. Next: get code after auth, then get token: https://developer.spotify.com/documentation/general/guides/authorization/code-flow/
 
       - [ ] uEe session or local storage, preferably session. No cookies. To store token on client side. 
     - [ ] Retrieve playlists by user id
