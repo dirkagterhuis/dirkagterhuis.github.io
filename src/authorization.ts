@@ -1,9 +1,18 @@
-import { config } from '../config.js'
+import { config } from '../config'
 import express from 'express'
 
 const state = (Math.random() + 1).toString(36).substring(7)
 const scope = 'playlist-read-private'
-const redirect_uri = 'http://localhost:8000/views/spotify-app.html' //TODO: make this dependent on environment
+const redirect_uri = 'http://localhost:8000/spotify-app' //TODO: make this dependent on environment // the redirect uri should be added to the allowed redirect URI's on https://developer.spotify.com/
+export const loginUrl: string =
+    'https://accounts.spotify.com/authorize?' +
+    new URLSearchParams({
+        response_type: 'code',
+        client_id: config.spotifyClientId,
+        scope: scope,
+        redirect_uri: redirect_uri,
+        state: state,
+    })
 
 var app = express()
 
@@ -12,7 +21,7 @@ var app = express()
 app.get('/login', function (req, res) {
     res.redirect(
         'https://accounts.spotify.com/authorize?' +
-            querystring.stringify({
+            new URLSearchParams({
                 response_type: 'code',
                 client_id: config.spotifyClientId,
                 scope: scope,

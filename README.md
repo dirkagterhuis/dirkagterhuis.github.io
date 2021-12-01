@@ -4,9 +4,9 @@
     - [ ] Authorization
       - [X] Implement proper secret management with local variables
       - [ ] Use Spotify [OAuth flow with PKCE extension](https://developer.spotify.com/documentation/general/guides/authorization/code-flow/) for web apps: that way you don't have to reveal the secret, only the client id. 
-        - [ ] **// Hier gebleven.** On button click, get redirected to spotify auth flow. Next: get code after auth, then get token: https://developer.spotify.com/documentation/general/guides/authorization/code-flow/
-
-      - [ ] uEe session or local storage, preferably session. No cookies. To store token on client side. 
+        - [ ] **// Hier gebleven.** After button click, store the code on client side or use it directly to get token: https://developer.spotify.com/documentation/general/guides/authorization/code-flow/
+          - [ ] NB the code is on client side, in the url. it should stay there?
+          - [ ] uEe session or local storage, preferably session. No cookies. To store token on client side. 
     - [ ] Retrieve playlists by user id
       - [ ] Call get on user playlists, then store all playlists
       - [ ] For all playlists, get all tracks.
@@ -37,3 +37,6 @@ localSpotifyAppClientSecret: "INSERT_CLIENT_SECRET"
 - Static website vs. Node.JS app: Went with Node.js: I want to learn it, and move it to TS, so just do it. It also makes this 1000 times easier and the learning more meaningfull than writing some vanilla static website that does everything itself without using NPM libraries. While at it, try out AWS or otherwise Heroku, since  you want to learn AWS anyway.
 - Converted website to work both as a static website, and as a Node.JS Express app, such that the website works from Github Pages until it's pushed to AWS. Had some issues with hosting locally using `ws` vs. `nodemon`, but Nodemon definitely had a preference in ease of development as you don't have to restart the server on every change. It did however require the whole app to work as a Node.JS Express app, since you run `nodemon index.ts` and got served by the app, while `ws` just rendered the `index.html` in root.
   - -> Didn't work.
+
+# Troubleshooting
+- During auth/login to spotify: redirect isn't working: Solution: add `http://localhost:8000/spotify-app` to the allowed redirect URI's on developer.spotify.com.

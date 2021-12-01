@@ -1,3 +1,5 @@
+import { loginUrl } from './src/authorization'
+
 import express from 'express'
 import path from 'path'
 // import { startAuth } from './src/authorization.js'
@@ -18,6 +20,11 @@ app.get('/', function (req, res) {
 
 app.get('/spotify-app', function (req, res) {
     res.sendFile(path.join(__dirname + '/public/views/spotify-app.html'))
+})
+
+app.get('/login', function (req, res) {
+    console.log('CLICK!')
+    res.redirect(loginUrl)
 })
 
 app.get('/weather-app', function (req, res) {
