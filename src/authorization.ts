@@ -3,7 +3,7 @@ import express from 'express'
 
 const state = (Math.random() + 1).toString(36).substring(7)
 const scope = 'playlist-read-private'
-const redirect_uri = 'http://localhost:8000/spotify-app' //TODO: make this dependent on environment // the redirect uri should be added to the allowed redirect URI's on https://developer.spotify.com/
+const redirect_uri = 'http://localhost:8000/spotify-app-callback' //TODO: make this dependent on environment // the redirect uri should be added to the allowed redirect URI's on https://developer.spotify.com/
 export const loginUrl: string =
     'https://accounts.spotify.com/authorize?' +
     new URLSearchParams({

@@ -22,6 +22,11 @@ app.get('/spotify-app', function (req, res) {
     res.sendFile(path.join(__dirname + '/public/views/spotify-app.html'))
 })
 
+app.get('/spotify-app-callback', function (req, res) {
+    console.log('code', req.query.code) // this works, now get token and store it on client side
+    res.sendFile(path.join(__dirname + '/public/views/spotify-app.html'))
+})
+
 app.get('/login', function (req, res) {
     console.log('CLICK!')
     res.redirect(loginUrl)
