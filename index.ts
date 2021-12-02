@@ -1,7 +1,9 @@
-import { loginUrl } from './src/authorization'
+import { loginUrl, redirect_uri } from './src/authorization'
+import { config } from './config'
 
 import express from 'express'
 import path from 'path'
+import { request } from 'request'
 // import { startAuth } from './src/authorization.js'
 
 const app = express()
@@ -23,7 +25,46 @@ app.get('/spotify-app', function (req, res) {
 })
 
 app.get('/spotify-app-callback', function (req, res) {
-    console.log('code', req.query.code) // this works, now get token and store it on client side
+    console.log('code', req.query.code)
+    console.log('state', req.query.state)
+    console.log('error', req.query.error)
+
+    const code = req.query.code || null // this works, now get token and store it on client side
+    const state = req.query.state || null //todo: verify state
+    const error = req.query.error || null
+
+    if (state === null) {
+        res.redirect(
+            '/#' +
+                new URLSearchParams({
+                    error: 'state_mismatch',
+                })
+        )
+    }
+    let authOptions = {
+        url: 'https://accounts.spotify.com/api/token',
+        form: {
+            code: code,
+            redirect_uri: redirect_uri,
+            grant_type: 'authorization_code',
+        },
+        headers: {
+            Authorization:
+                'Basic ' +
+                Buffer.from(config.spotifyClientId + ':' + config.spotifyClientSecret).toString(
+                    'base64'
+                ),
+        },
+        json: true,
+    }
+
+    request.post(authOptions, function (error, response, body) {
+        //error here: request is deprecated, use axiom
+        if (!error && response.statusCode === 200) {
+            const token = body.access_token
+            console.log('token: ' + token)
+        }
+    })
     res.sendFile(path.join(__dirname + '/public/views/spotify-app.html'))
 })
 
