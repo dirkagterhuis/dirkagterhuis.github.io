@@ -30,15 +30,7 @@ app.get('/spotify-app-callback', async function (req, res) {
     console.log('state', req.query.state)
     console.log('error', req.query.error)
 
-    const code = req.query.code || null // this works, now get token and store it on client side
-    let code2
-    // this did something, but now i get back empty error
-    // const code = (req.query.code as string) || null // this works, now get token and store it on client side
-
-    if (req.query && req.query.code) {
-        code2 = (req.query as any).code
-    }
-
+    const code = (req.query.code as string) || null // this works, now get token and store it on client side
     const state = req.query.state || null //todo: verify state
     const error = req.query.error || null
 
@@ -51,16 +43,14 @@ app.get('/spotify-app-callback', async function (req, res) {
         )
     }
 
-    const requestBody = new url.URLSearchParams({ test: 'test' })
-    requestBody.append('code', code2) // remove stringify here, it messes up the code
-    requestBody.append('redirect_uri', redirect_uri)
-    requestBody.append('grant_type', 'authorization_code')
-
-    console.log(`request body: ${JSON.stringify(requestBody)}`)
+    const requestBody = new url.URLSearchParams({
+        code,
+        redirect_uri: redirect_uri,
+        grant_type: 'authorization_code',
+    })
 
     try {
-        console.log('here')
-        const tokenResponse = await axios.post(
+        const gettokenResponse = await axios.post(
             'https://accounts.spotify.com/api/token',
             requestBody.toString(),
             {
@@ -76,15 +66,13 @@ app.get('/spotify-app-callback', async function (req, res) {
                 data: requestBody.toString(),
             }
         )
-        console.log('response: ' + JSON.stringify(tokenResponse))
-        if (tokenResponse.status === 200) {
-            const token = tokenResponse.request.access_token
-            console.log('token: ' + token)
+        if (gettokenResponse.status === 200) {
+            const data = gettokenResponse.data
+            console.log('token: ' + JSON.stringify(data))
+            // hier gebleven
         }
     } catch (error) {
-        console.log(`Error: ${JSON.stringify(error)}`)
-        console.log('$$$$$$$$$$$$$$$$')
-        console.log(JSON.stringify(error.statusText))
+        console.log(`Error: ${JSON.stringify(error.message)}`)
     }
     res.sendFile(path.join(__dirname + '/public/views/spotify-app.html'))
 })
