@@ -4,6 +4,7 @@
     "dev": "nodemon index.ts --ext .js,.ts,.html,.json"
   },
   "dependencies": {
+    "axios": "^0.24.0",
     "bootstrap": "^4.3.1",
     "express": "^4.17.1",
     "glob-parent": ">=5.1.2",

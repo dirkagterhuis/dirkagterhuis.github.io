@@ -3,7 +3,8 @@ import { config } from './config'
 
 import express from 'express'
 import path from 'path'
-import { request } from 'request'
+import axios from 'axios'
+import url from 'url'
 // import { startAuth } from './src/authorization.js'
 
 const app = express()
@@ -24,12 +25,20 @@ app.get('/spotify-app', function (req, res) {
     res.sendFile(path.join(__dirname + '/public/views/spotify-app.html'))
 })
 
-app.get('/spotify-app-callback', function (req, res) {
+app.get('/spotify-app-callback', async function (req, res) {
     console.log('code', req.query.code)
     console.log('state', req.query.state)
     console.log('error', req.query.error)
 
     const code = req.query.code || null // this works, now get token and store it on client side
+    let code2
+    // this did something, but now i get back empty error
+    // const code = (req.query.code as string) || null // this works, now get token and store it on client side
+
+    if (req.query && req.query.code) {
+        code2 = (req.query as any).code
+    }
+
     const state = req.query.state || null //todo: verify state
     const error = req.query.error || null
 
@@ -41,30 +50,42 @@ app.get('/spotify-app-callback', function (req, res) {
                 })
         )
     }
-    let authOptions = {
-        url: 'https://accounts.spotify.com/api/token',
-        form: {
-            code: code,
-            redirect_uri: redirect_uri,
-            grant_type: 'authorization_code',
-        },
-        headers: {
-            Authorization:
-                'Basic ' +
-                Buffer.from(config.spotifyClientId + ':' + config.spotifyClientSecret).toString(
-                    'base64'
-                ),
-        },
-        json: true,
-    }
 
-    request.post(authOptions, function (error, response, body) {
-        //error here: request is deprecated, use axiom
-        if (!error && response.statusCode === 200) {
-            const token = body.access_token
+    const requestBody = new url.URLSearchParams({ test: 'test' })
+    requestBody.append('code', code2) // remove stringify here, it messes up the code
+    requestBody.append('redirect_uri', redirect_uri)
+    requestBody.append('grant_type', 'authorization_code')
+
+    console.log(`request body: ${JSON.stringify(requestBody)}`)
+
+    try {
+        console.log('here')
+        const tokenResponse = await axios.post(
+            'https://accounts.spotify.com/api/token',
+            requestBody.toString(),
+            {
+                method: 'post',
+                headers: {
+                    Authorization:
+                        'Basic ' +
+                        Buffer.from(
+                            config.spotifyClientId + ':' + config.spotifyClientSecret
+                        ).toString('base64'),
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                data: requestBody.toString(),
+            }
+        )
+        console.log('response: ' + JSON.stringify(tokenResponse))
+        if (tokenResponse.status === 200) {
+            const token = tokenResponse.request.access_token
             console.log('token: ' + token)
         }
-    })
+    } catch (error) {
+        console.log(`Error: ${JSON.stringify(error)}`)
+        console.log('$$$$$$$$$$$$$$$$')
+        console.log(JSON.stringify(error.statusText))
+    }
     res.sendFile(path.join(__dirname + '/public/views/spotify-app.html'))
 })
 
