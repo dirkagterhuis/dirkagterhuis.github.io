@@ -8,12 +8,15 @@
           - [x] Call spotify with that code
           - [x] you have token, now what? -> get playlists + tracks
           - [x] NB the code is on client side, in the url. it should stay there? -> for now: yes. Try and get all playlists + tracks in 1 concurrent call: perhaps you don't need to store it at all. If you do send it, encrypt it `session.userData.token = ...`. No cookies.
-    - [ ] Retrieve playlists by user id
-      - [ ] Call get on user playlists, then store all playlists
-        - [ ] pagination: first get all playlists. 
+          - [ ] Don't show auth code in url
+    - [x] Retrieve playlists by user id
+      - [x] Call get on user playlists, then store all playlists
+        - [x] pagination: first get all playlists. 
         - [ ] Possibly filter on owned by user? 
-      - [ ] For all playlists, get all tracks.
+      - [x] For all playlists, get all tracks.
     - [ ] Give back a json or csv. 
+      - [ ] Both as zip or... Allow user to choose
+    - [ ] Show something to user regarding # of playlists that are about to be extracted, and progress of the whole process. 
     - [ ] AWS
         - [ ] To budget, add action to shutdown EC2 instance when budget is reached.
         - [ ] Use Elastic Beanstalk to host node.js server? [link](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/create_deploy_nodejs_express.html)
@@ -22,7 +25,12 @@
 - [ ] Something to track traffic
 - [ ] Make something to turn .md blogs into content
 - [ ] Convert to ts. Add types.
+- [ ] Add tests
 - [ ] Make site available as both static (github pages) as Node.js app using Express. Something with the index.html embedding the /public/views/index.html, but then with all refs working. Try and determine whether it's static or not, and then serve the correct content accordingly, with the right references. Or: use a view engine and move views to root dir, and update refs. Ideally end op with only 1 views dir and 1 static index.html, referencing the views.
+
+# Future features
+- [ ] Allow selection of 'own playlists only' vs. 'subscribed playlists too'. 
+- [ ] Allow selection of which fields to be retrieved
 
 # How to
 

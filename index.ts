@@ -5,6 +5,7 @@ import express from 'express'
 import path from 'path'
 import axios from 'axios'
 import url from 'url'
+import fs from 'fs'
 // import { startAuth } from './src/authorization.js'
 
 const app = express()
@@ -49,7 +50,6 @@ app.get('/spotify-app-callback', async function (req, res) {
         grant_type: 'authorization_code',
     })
 
-    // maybe remove the try...catch now
     let authToken: string
     try {
         const getTokenResponse = await axios.post(
@@ -65,8 +65,6 @@ app.get('/spotify-app-callback', async function (req, res) {
                         ).toString('base64'),
                     'Content-Type': 'application/x-www-form-urlencoded',
                 },
-                // data isn't needed, it's all in the params.
-                // data: requestBody.toString(),
             }
         )
         if (getTokenResponse.status === 200) {
@@ -78,12 +76,11 @@ app.get('/spotify-app-callback', async function (req, res) {
         console.log(`Error: ${JSON.stringify(error.message)}`)
     }
 
-    // make new request to get all playlists
-    // source: https://developer.spotify.com/documentation/web-api/reference/#/operations/get-a-list-of-current-users-playlists
     const getPlaylistsUrl = 'https://api.spotify.com/v1/me/playlists'
     const playlists = await getPlaylists(authToken, getPlaylistsUrl, [])
-    // console.log(`#### Playlist Grand : ${JSON.stringify(playlists, null, 2)}`)
-    console.log(`#### Playlist Grand total: ${playlists.length}`)
+    await getItemsByPlaylists(authToken, playlists)
+
+    fs.writeFileSync('./playlists.json', JSON.stringify(playlists, null, 2))
 
     res.sendFile(path.join(__dirname + '/public/views/spotify-app.html'))
 })
@@ -116,6 +113,52 @@ async function getPlaylists(token: string, url: string, playlists) {
         console.log(`Error: ${JSON.stringify(error.message)}`)
     }
     return playlists
+}
+
+async function getItemsByPlaylists(token: string, playlists) {
+    console.log(`Getting all tracks for ${playlists.length} playlists.`)
+    for (let i = 0; i < playlists.length; i++) {
+        console.log(
+            `Getting tracks for playlist #${i + 1} out of ${playlists.length}: ${playlists[i].name}`
+        )
+        const playlistId = playlists[i].id
+        const url = `https://api.spotify.com/v1/playlists/${playlistId}/tracks`
+        playlists[i].items = await getItemsByPlaylist(token, url, [])
+    }
+    console.log(`Done.`)
+}
+
+async function getItemsByPlaylist(token: string, url: string, playlistItems) {
+    let totalToGet: number
+    try {
+        const getPlaylistItemResponse = await axios.get(url, {
+            headers: {
+                Authorization: 'Bearer ' + token,
+            },
+            params: {
+                limit: 50,
+                // fields: 'total,next,items(added_by.id,track(id,name,album.name,artists(name)))',
+                fields: 'total,next,items(track(id,name,album.name,artists(name)))',
+            },
+        })
+        if (getPlaylistItemResponse.status === 200) {
+            playlistItems.push(...getPlaylistItemResponse.data.items)
+            totalToGet = getPlaylistItemResponse.data.total
+        }
+        const next: string = getPlaylistItemResponse.data.next
+        if (next === null) {
+            if (totalToGet !== playlistItems.length) {
+                throw new Error(
+                    `Expected: ${totalToGet} playlist items; retrieved: ${playlistItems.length}`
+                )
+            }
+            return playlistItems
+        }
+        await getItemsByPlaylist(token, next, playlistItems)
+    } catch (error) {
+        console.log(`Error: ${JSON.stringify(error.message)}`)
+    }
+    return playlistItems
 }
 
 app.get('/login', function (req, res) {
