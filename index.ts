@@ -83,6 +83,9 @@ app.get('/spotify-app-callback', async function (req, res) {
     fs.writeFileSync('./playlists.json', JSON.stringify(playlists, null, 2))
 
     res.sendFile(path.join(__dirname + '/public/views/spotify-app.html'))
+
+    // to serve a local file, but perhaps you don't want to save it on the server. Or make it unique and delete it afterwards.
+    // res.download(path.join(__dirname + '/playlists.json'))
 })
 
 async function getPlaylists(token: string, url: string, playlists) {
@@ -117,7 +120,8 @@ async function getPlaylists(token: string, url: string, playlists) {
 
 async function getItemsByPlaylists(token: string, playlists) {
     console.log(`Getting all tracks for ${playlists.length} playlists.`)
-    for (let i = 0; i < playlists.length; i++) {
+    // this is for dev purposes. For production release, change `10` to `playlists.length`
+    for (let i = 0; i < 10; i++) {
         console.log(
             `Getting tracks for playlist #${i + 1} out of ${playlists.length}: ${playlists[i].name}`
         )
