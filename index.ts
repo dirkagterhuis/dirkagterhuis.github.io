@@ -81,27 +81,42 @@ app.get('/spotify-app-callback', async function (req, res) {
     // make new request to get all playlists
     // source: https://developer.spotify.com/documentation/web-api/reference/#/operations/get-a-list-of-current-users-playlists
     const getPlaylistsUrl = 'https://api.spotify.com/v1/me/playlists'
-    const limit = 50
-
-    // now call the get playlist with Axios
-    console.log(`Bearer token: ${authToken}`)
-    try {
-        const getPlaylistResponse = await axios.get('https://api.spotify.com/v1/me/playlists', {
-            headers: {
-                Authorization: 'Bearer ' + authToken,
-            },
-        })
-        if (getPlaylistResponse.status === 200) {
-            const data = getPlaylistResponse.data
-            console.log('playlists: ' + JSON.stringify(data, null, 2))
-            // hier gebleven
-        }
-    } catch (error) {
-        console.log(`Error: ${JSON.stringify(error.message)}`)
-    }
+    const playlists = await getPlaylists(authToken, getPlaylistsUrl, [])
+    // console.log(`#### Playlist Grand : ${JSON.stringify(playlists, null, 2)}`)
+    console.log(`#### Playlist Grand total: ${playlists.length}`)
 
     res.sendFile(path.join(__dirname + '/public/views/spotify-app.html'))
 })
+
+async function getPlaylists(token: string, url: string, playlists) {
+    let totalToGet: number
+    try {
+        const getPlaylistResponse = await axios.get(url, {
+            headers: {
+                Authorization: 'Bearer ' + token,
+            },
+            params: {
+                limit: 50,
+            },
+        })
+        if (getPlaylistResponse.status === 200) {
+            playlists.push(...getPlaylistResponse.data.items)
+            totalToGet = getPlaylistResponse.data.total
+        }
+        const next: string = getPlaylistResponse.data.next
+        if (next === null) {
+            if (totalToGet !== playlists.length) {
+                throw new Error(`Expected: ${totalToGet} playlists; retrieved: ${playlists.length}`)
+            }
+            return playlists
+        }
+        console.log(`Getting new page of playlists. Current size: ${playlists.length}`)
+        await getPlaylists(token, next, playlists)
+    } catch (error) {
+        console.log(`Error: ${JSON.stringify(error.message)}`)
+    }
+    return playlists
+}
 
 app.get('/login', function (req, res) {
     console.log('CLICK!')

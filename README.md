@@ -4,12 +4,14 @@
     - [ ] Authorization
       - [X] Implement proper secret management with local variables
       - [ ] Use Spotify [OAuth flow with PKCE extension](https://developer.spotify.com/documentation/general/guides/authorization/code-flow/) for web apps: that way you don't have to reveal the secret, only the client id. 
-        - [ ] **// Hier gebleven.** After button click, store the code on client side or use it directly to get token: https://developer.spotify.com/documentation/general/guides/authorization/code-flow/
-          - [ ] Call spotify with that code
-          - [ ] NB the code is on client side, in the url. it should stay there?
-          - [ ] uEe session or local storage, preferably session. No cookies. To store token on client side. 
+        - [x] After button click, store the code on client side or use it directly to get token: https://developer.spotify.com/documentation/general/guides/authorization/code-flow/
+          - [x] Call spotify with that code
+          - [x] you have token, now what? -> get playlists + tracks
+          - [x] NB the code is on client side, in the url. it should stay there? -> for now: yes. Try and get all playlists + tracks in 1 concurrent call: perhaps you don't need to store it at all. If you do send it, encrypt it `session.userData.token = ...`. No cookies.
     - [ ] Retrieve playlists by user id
       - [ ] Call get on user playlists, then store all playlists
+        - [ ] pagination: first get all playlists. 
+        - [ ] Possibly filter on owned by user? 
       - [ ] For all playlists, get all tracks.
     - [ ] Give back a json or csv. 
     - [ ] AWS
