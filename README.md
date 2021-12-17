@@ -14,6 +14,7 @@
         - [x] pagination: first get all playlists. 
         - [ ] Possibly filter on owned by user? 
       - [x] For all playlists, get all tracks.
+    - [ ] Clean up and organize code properly
     - [ ] Give back a json or csv. 
       - [ ] Both as zip or... Allow user to choose
     - [ ] Show something to user regarding # of playlists that are about to be extracted, and progress of the whole process. 
