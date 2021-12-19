@@ -22,6 +22,7 @@
         - [ ] To budget, add action to shutdown EC2 instance when budget is reached.
         - [ ] Use Elastic Beanstalk to host node.js server? [link](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/create_deploy_nodejs_express.html)
         - [ ] Implement lambda's?
+        - [ ] Make something that on Dev, it only retrieves 10 playlists, but on prod, retrieves all
 - [ ] Use menu button for navigation
 - [ ] Something to track traffic
 - [ ] Make something to turn .md blogs into content
