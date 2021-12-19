@@ -2,11 +2,12 @@ import { loginUrl, redirect_uri, getAuthToken, state as originalState } from './
 import { getPlaylists, getItemsByPlaylists } from './src/spotifyApiUtils'
 
 import express from 'express'
+import type { Express } from 'express'
 import path from 'path'
 import fs from 'fs'
 
-const app = express()
-const port = process.env.PORT || 8000
+const app: Express = express()
+const port: string | number = process.env.PORT || 8000
 
 // Here you might have to setup a view engine if you want to do something else rather than only serve static content.
 // If you do that, do use the `index.html` in root, not in `/public`
@@ -28,7 +29,7 @@ app.get('/spotify-app-callback', async function (req, res) {
     console.log('state', req.query.state)
     console.log('error', req.query.error)
 
-    const code = (req.query.code as string) || null
+    const code: string = (req.query.code as string) || null
     const state = req.query.state || null
     const error = req.query.error || null
 
