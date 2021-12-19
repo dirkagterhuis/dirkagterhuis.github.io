@@ -2,6 +2,7 @@ import { config } from '../config'
 import axios from 'axios'
 import url from 'url'
 
+// Uses Spotify OAuth flow for web apps: https://developer.spotify.com/documentation/general/guides/authorization/code-flow/
 export const state = (Math.random() + 1).toString(36).substring(7)
 export const redirect_uri = 'http://localhost:8000/spotify-app-callback' //TODO: make this dependent on environment // the redirect uri should be added to the allowed redirect URI's on https://developer.spotify.com/
 export const loginUrl: string =
