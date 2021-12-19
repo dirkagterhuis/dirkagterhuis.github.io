@@ -48,7 +48,7 @@ app.get('/spotify-app-callback', async function (req, res) {
     // perhaps you don't want this locally, see if you can serve a json without a file, e.g.: https://stackoverflow.com/questions/25434506/download-file-from-json-object-in-node-js
     fs.writeFileSync('./playlists.json', JSON.stringify(playlists, null, 2))
 
-    res.sendFile(path.join(__dirname + '/public/views/spotify-app.html'))
+    res.redirect('/spotify-app')
     // to serve a local file, but perhaps you don't want to save it on the server. Or make it unique and delete it afterwards.
     // res.download(path.join(__dirname + '/playlists.json'))
 })

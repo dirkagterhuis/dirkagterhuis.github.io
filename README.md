@@ -8,7 +8,6 @@
           - [x] Call spotify with that code
           - [x] you have token, now what? -> get playlists + tracks
           - [x] NB the code is on client side, in the url. it should stay there? -> for now: yes. Try and get all playlists + tracks in 1 concurrent call: perhaps you don't need to store it at all. If you do send it, encrypt it `session.userData.token = ...`. No cookies.
-          - [ ] Don't show auth code in url
     - [x] Retrieve playlists by user id
       - [x] Call get on user playlists, then store all playlists
         - [x] pagination: first get all playlists. 
