@@ -9,7 +9,8 @@ import * as ejs from 'ejs'
 
 const app: Express = express()
 const port: string | number = process.env.PORT || 8000
-const loadingMessage: string = ''
+//this is a bad idea: pass it around in functions: https://stackoverflow.com/questions/53801270/updating-res-locals-after-each-var-change
+let loadingMessage: string = ''
 
 // Setup static directory to serve
 app.use(express.static(path.join(__dirname, './public')))
@@ -26,7 +27,6 @@ app.get('/spotify-app', function (req, res) {
     res.render(path.join(__dirname + '/public/views/spotify-app.html'), {
         showLoading: false,
         loadingMessage,
-        testVar: '',
     })
 })
 
@@ -49,7 +49,19 @@ app.get('/spotify-app-callback', async function (req, res) {
     }
 
     const authToken = await getAuthToken(code)
+    // this is breaking as it's already in the finished state: https://stackoverflow.com/questions/7042340/error-cant-set-headers-after-they-are-sent-to-the-client
+    res.render(path.join(__dirname + '/public/views/spotify-app.html'), {
+        showLoading: false,
+        loadingMessage: (loadingMessage += `Succesfully signed in to your Spotify Account`),
+    })
+
     const playlists = await getPlaylists(authToken, 'https://api.spotify.com/v1/me/playlists', [])
+    // also here
+    // res.render(path.join(__dirname + '/public/views/spotify-app.html'), {
+    //     showLoading: false,
+    //     loadingMessage:
+    //         (loadingMessage += `\nRetrieved ${playlists.length} playlists from your Spotify Account`),
+    // })
     await getItemsByPlaylists(authToken, playlists)
 
     // perhaps you don't want this locally, see if you can serve a json without a file, e.g.: https://stackoverflow.com/questions/25434506/download-file-from-json-object-in-node-js

@@ -3,12 +3,13 @@
   - Deploy to AWS. Forward from 'own' website to AWS website.
     - [ ] To budget, add action to shutdown EC2 instance when budget is reached.
     - [ ] Use Elastic Beanstalk to host node.js server? [link](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/create_deploy_nodejs_express.html)
+      - [ ] or [link](https://ourcodeworld.com/articles/read/977/how-to-deploy-a-node-js-application-on-aws-ec2-server)
     - [ ] Implement lambda's?
     - [ ] Make something that on Dev, it only retrieves 10 playlists, but on prod, retrieves all
   - [ ] Possibly filter on playlists owned by user? 
   - [ ] Clean up and organize code properly
   - [ ] Give back a json or csv. Allow user to choose.
-  - [ ] Show something to user regarding # of playlists that are about to be extracted, and progress of the whole process. 
+  - [ ] WIP: Show something to user regarding # of playlists that are about to be extracted, and progress of the whole process. 
 - [ ] Use menu button for navigation
 - [ ] Something to track traffic
 - [ ] Make something to turn .md blogs into content
