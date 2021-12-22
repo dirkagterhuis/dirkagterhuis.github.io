@@ -5,23 +5,29 @@ import express from 'express'
 import type { Express } from 'express'
 import path from 'path'
 import fs from 'fs'
+import * as ejs from 'ejs'
 
 const app: Express = express()
 const port: string | number = process.env.PORT || 8000
-
-// Here you might have to setup a view engine if you want to do something else rather than only serve static content.
-// If you do that, do use the `index.html` in root, not in `/public`
-// app.set('views', path.join(__dirname, '../views')) //used to implement a directory other than '../views'
+const loadingMessage: string = ''
 
 // Setup static directory to serve
 app.use(express.static(path.join(__dirname, './public')))
 
+// Only want to use html with some variables -> using EJS
+app.engine('html', ejs.renderFile)
+
+// remember: static website uses ~/index.html; dynamic website uses ~/public/views/index.html
 app.get('/', function (req, res) {
     res.sendFile(path.join(__dirname + '/public/views/index.html'))
 })
 
 app.get('/spotify-app', function (req, res) {
-    res.sendFile(path.join(__dirname + '/public/views/spotify-app.html'))
+    res.render(path.join(__dirname + '/public/views/spotify-app.html'), {
+        showLoading: false,
+        loadingMessage,
+        testVar: '',
+    })
 })
 
 app.get('/spotify-app-callback', async function (req, res) {
