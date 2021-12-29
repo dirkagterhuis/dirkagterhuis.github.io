@@ -1,7 +1,8 @@
 body {
     color: #333333;
     font-family: arial;
-    max-width: device-width;
+    /* max-width: device-width; */
+    max-width: 1000px;
     margin: 0 auto;
     padding: 0 16px;
     display: flex;
@@ -43,6 +44,23 @@ header a {
 
 .portrait {
     width: 250px;
+}
+
+.centre {
+    display: flex; /* much love for flexboxes */
+    justify-content: center;
+}
+
+.spotify-button {
+    border-radius:50px;
+    border: 1px solid transparent;
+    padding:0 3px 0 3px;
+    display:inline-block;
+    color:#FFFFFF;
+    background:#1DB954;
+    cursor:pointer;
+    height: 35px;
+    width: 150px;
 }
 
 .loadingMessages {
