@@ -51,6 +51,10 @@ header a {
     justify-content: center;
 }
 
+.empty-div {
+    height: 30px;
+}
+
 .spotify-button {
     border-radius:50px;
     border: 1px solid transparent;
