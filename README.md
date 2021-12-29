@@ -23,6 +23,7 @@
 # Future features
 - [ ] Allow selection of 'own playlists only' vs. 'subscribed playlists too'. 
 - [ ] Allow selection of which fields to be retrieved
+- [ ] Allow uploading of playlists to a Spotify account. 
 
 # How to
 

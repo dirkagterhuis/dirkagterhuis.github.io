@@ -8,6 +8,7 @@ import { Server } from 'socket.io'
 import cors from 'cors'
 import path from 'path'
 import fs from 'fs'
+// can be removed if not used in any html files
 import * as ejs from 'ejs'
 
 const app: Express = express()
