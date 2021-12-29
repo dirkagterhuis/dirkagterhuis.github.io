@@ -45,10 +45,17 @@ header a {
     width: 250px;
 }
 
-.loadingMessage {
-    list-style-type: none; /* Remove bullets */
-    padding: 0; /* Remove padding */
+.loadingMessages {
+    /* padding: 10px;*/
     margin: 0; /* Remove margins */
-    overflow: hidden;
-    overflow-y: scroll;
+    overflow: auto;
+    /* overflow-y: scroll; */
+    max-height: 200px;
+    background: #DCDCDC;
+}
+
+.loadingMessageList {
+    list-style-type: none; /* Remove bullets */
+    padding: 10px; /* Remove padding */
+    margin: 0; /* Remove margins */
 }

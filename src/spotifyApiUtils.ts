@@ -31,11 +31,15 @@ export async function getPlaylists(token: string, url: string, playlists) {
     return playlists
 }
 
-export async function getItemsByPlaylists(token: string, playlists) {
+export async function getItemsByPlaylists(token: string, playlists, sendMessageToClient) {
     console.log(`Getting all tracks for ${playlists.length} playlists.`)
     // For production release, change `10` to `playlists.length`: make something to only retrieve 10 on dev, and all in prd.
     for (let i = 0; i < 10; i++) {
         console.log(
+            `Getting tracks for playlist #${i + 1} out of ${playlists.length}: ${playlists[i].name}`
+        )
+        sendMessageToClient(
+            null,
             `Getting tracks for playlist #${i + 1} out of ${playlists.length}: ${playlists[i].name}`
         )
         const playlistId = playlists[i].id

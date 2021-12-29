@@ -41,7 +41,9 @@
 
             <p><%= loadingMessage %></p>
 
-            <ul id="loadingMessageElement" class="loadingMessage"></ul>
+            <div id="loadingMessages" class="loadingMessages" hidden>
+                <ul id="loadingMessageList" class="loadingMessageList"></ul>
+            </div>
 
             <p>{Something with getting all songs for all playlists}</p>
             <p>{Something with storing those songs}</p>
@@ -75,13 +77,19 @@
     <script src="/socket.io/socket.io.js"></script>
     <script>
         let socket = io()
-        let loadingMessagesElement = document.getElementById('loadingMessageElement')
+        let loadingMessages = document.getElementById('loadingMessages')
+        let loadingMessageList = document.getElementById('loadingMessageList')
 
         socket.on('loadingMessage', function (event) {
             console.log(`MESSAGE ON CLIENT INCOMING: ${JSON.stringify(event)}`)
+            if (!loadingMessages.style.display) {
+                loadingMessages.style.display = 'block'
+            }
+
             var item = document.createElement('li')
             item.textContent = event.body
-            loadingMessagesElement.appendChild(item)
+            loadingMessageList.appendChild(item)
+            loadingMessages.scrollTop = loadingMessages.scrollHeight
         })
     </script>
 </html>

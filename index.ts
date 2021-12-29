@@ -65,19 +65,15 @@ app.get('/spotify-app-callback', async function (req, res) {
     }
 
     const authToken = await getAuthToken(code)
-    io.to([clients[0].socketId]).emit('loadingMessage', {
-        body: `Succesfully signed in to your Spotify Account`,
-    })
+    sendMessageToClient(null, `Succesfully signed in to your Spotify Account`)
 
     const playlists = await getPlaylists(authToken, 'https://api.spotify.com/v1/me/playlists', [])
 
     console.log(`clients:  ${clients}`)
     // somehow get the socket id from the client
-    io.to([clients[0].socketId]).emit('loadingMessage', {
-        body: `Retrieved ${playlists.length} playlists from your Spotify Account`,
-    })
+    sendMessageToClient(null, `Retrieved ${playlists.length} playlists from your Spotify Account`)
 
-    await getItemsByPlaylists(authToken, playlists)
+    await getItemsByPlaylists(authToken, playlists, sendMessageToClient)
 
     // perhaps you don't want this locally, see if you can serve a json without a file, e.g.: https://stackoverflow.com/questions/25434506/download-file-from-json-object-in-node-js
     // instead of this, offer the file to download directly in client browser
@@ -129,3 +125,9 @@ app.get('/help', function (req, res) {
 server.listen(port, () => {
     console.log(`Server is up on port ${port}!`)
 })
+
+function sendMessageToClient(socketId, message: string) {
+    io.to([clients[0].socketId]).emit('loadingMessage', {
+        body: message,
+    })
+}
