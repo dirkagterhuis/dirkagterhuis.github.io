@@ -41,6 +41,8 @@
 
             <p><%= loadingMessage %></p>
 
+            <ul id="loadingMessageElement" class="loadingMessage"></ul>
+
             <p>{Something with getting all songs for all playlists}</p>
             <p>{Something with storing those songs}</p>
             <p>{Something with sending them to a new Spotify Account}</p>
@@ -70,6 +72,16 @@
     <script>
         includeHTML()
     </script>
-    <!-- <script src="index.js"></script>
-    <script src="../src/authorization.js"></script> -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        let socket = io()
+        let loadingMessagesElement = document.getElementById('loadingMessageElement')
+
+        socket.on('loadingMessage', function (event) {
+            console.log(`MESSAGE ON CLIENT INCOMING: ${JSON.stringify(event)}`)
+            var item = document.createElement('li')
+            item.textContent = event.body
+            loadingMessagesElement.appendChild(item)
+        })
+    </script>
 </html>

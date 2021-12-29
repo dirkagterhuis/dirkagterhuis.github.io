@@ -44,3 +44,11 @@ header a {
 .portrait {
     width: 250px;
 }
+
+.loadingMessage {
+    list-style-type: none; /* Remove bullets */
+    padding: 0; /* Remove padding */
+    margin: 0; /* Remove margins */
+    overflow: hidden;
+    overflow-y: scroll;
+}
