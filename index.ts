@@ -17,7 +17,13 @@ const server = http.createServer(app) //express does this behind the scenes anyw
 const io = new Server(server) //but you need the 'server' variable because socket.io needs it as param
 //this is a bad idea: pass it around in functions: https://stackoverflow.com/questions/53801270/updating-res-locals-after-each-var-change
 let loadingMessage: string = ''
-let clients = []
+
+interface Client {
+    socketId: string
+    socket: any
+    state: string
+}
+let clients: Client[] = []
 
 // Setup static directory to serve
 app.use(express.static(path.join(__dirname, './public')))
@@ -41,11 +47,12 @@ app.get('/spotify-app', function (req, res) {
         showLoading: false,
         loadingMessage,
     })
-    console.log(`Clients: ${JSON.stringify(clients)}`)
+    console.log(`Clients @ /spotify-app: ${JSON.stringify(clients)}`)
 })
 
 app.get('/spotify-app-callback', async function (req, res) {
     // first render the page though
+    // use 'redirect', not 'render', as to remove the code from the url
     res.redirect('/spotify-app')
 
     console.log('code', req.query.code)
@@ -66,15 +73,25 @@ app.get('/spotify-app-callback', async function (req, res) {
     }
 
     const authToken = await getAuthToken(code)
-    sendMessageToClient(null, `Succesfully signed in to your Spotify Account`)
+
+    // this is a bit dodgy as socket.io creating the client will race with getting the auth token
+    const client = clients.find((obj) => {
+        return obj.state === state
+    })
+    if (!client) {
+        throw new Error(`Request not coming from an active session.`)
+    }
+
+    sendMessageToClient(client.socketId, `Succesfully signed in to your Spotify Account`)
 
     const playlists = await getPlaylists(authToken, 'https://api.spotify.com/v1/me/playlists', [])
 
-    console.log(`clients:  ${clients}`)
-    // somehow get the socket id from the client
-    sendMessageToClient(null, `Retrieved ${playlists.length} playlists from your Spotify Account`)
+    sendMessageToClient(
+        client.socketId,
+        `Retrieved ${playlists.length} playlists from your Spotify Account`
+    )
 
-    await getItemsByPlaylists(authToken, playlists, sendMessageToClient)
+    await getItemsByPlaylists(authToken, playlists, sendMessageToClient, client.socketId)
 
     // perhaps you don't want this locally, see if you can serve a json without a file, e.g.: https://stackoverflow.com/questions/25434506/download-file-from-json-object-in-node-js
     // instead of this, offer the file to download directly in client browser
@@ -92,7 +109,13 @@ io.on('connection', (socket) => {
     clients.push({
         socketId: socket.id,
         socket,
+        state: originalState,
     })
+
+    // don't throw away yet depending on whether you want to identify users based on the (unique?) state
+    // io.to(socket.id).emit('sessionId', {
+    //     body: sessionId,
+    // })
 
     socket.on('disconnect', () => {
         console.log('user disconnected')
@@ -128,7 +151,7 @@ server.listen(port, () => {
 })
 
 function sendMessageToClient(socketId, message: string) {
-    io.to([clients[0].socketId]).emit('loadingMessage', {
+    io.to(socketId).emit('loadingMessage', {
         body: message,
     })
 }

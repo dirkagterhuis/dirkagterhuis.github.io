@@ -10,12 +10,13 @@
   - [ ] Clean up and organize code properly
   - [ ] Give back a json or csv. Allow user to choose.
   - [ ] WIP: Show something to user regarding # of playlists that are about to be extracted, and progress of the whole process. 
-    - [ ] ...something to pass around socket id
+      - [ ] When nodemon doesn't restart after every request: Check if state is different for every client. If so: perhaps use the session id and store it locally to identify a client.
 - [ ] Use menu button for navigation
 - [ ] Something to track traffic
 - [ ] Make something to turn .md blogs into content
 - [ ] Convert to ts. Add types.
 - [ ] Add tests
+- [ ] cookie notification?
 - [ ] Make site available as both static (github pages) as Node.js app using Express. Something with the index.html embedding the /public/views/index.html, but then with all refs working. Try and determine whether it's static or not, and then serve the correct content accordingly, with the right references. Or: use a view engine and move views to root dir, and update refs. Ideally end op with only 1 views dir and 1 static index.html, referencing the views.
   - Converted website to work both as a static website, and as a Node.JS Express app, such that the website works from Github Pages until it's pushed to AWS. Had some issues with hosting locally using `ws` vs. `nodemon`, but Nodemon definitely had a preference in ease of development as you don't have to restart the server on every change. It did however require the whole app to work as a Node.JS Express app, since you run `nodemon index.ts` and got served by the app, while `ws` just rendered the `index.html` in root.-> Didn't work yet.
 
