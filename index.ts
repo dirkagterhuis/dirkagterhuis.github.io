@@ -15,8 +15,6 @@ const app: Express = express()
 const port: string | number = process.env.PORT || 8000
 const server = http.createServer(app) //express does this behind the scenes anyways.
 const io = new Server(server) //but you need the 'server' variable because socket.io needs it as param
-//this is a bad idea: pass it around in functions: https://stackoverflow.com/questions/53801270/updating-res-locals-after-each-var-change
-let loadingMessage: string = ''
 
 interface Client {
     socketId: string
@@ -45,13 +43,11 @@ app.get('/', function (req, res) {
 app.get('/spotify-app', function (req, res) {
     res.render(path.join(__dirname + '/public/views/spotify-app.html'), {
         showLoading: false,
-        loadingMessage,
     })
     console.log(`Clients @ /spotify-app: ${JSON.stringify(clients)}`)
 })
 
 app.get('/spotify-app-callback', async function (req, res) {
-    // first render the page though
     // use 'redirect', not 'render', as to remove the code from the url
     res.redirect('/spotify-app')
 

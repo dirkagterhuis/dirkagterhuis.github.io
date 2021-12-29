@@ -1,18 +1,20 @@
 # To do
 - [ ] Spotify-app
+  - [ ] Properly give back the file, not as a file stored in local filesystem. Check if nodemon doesn't restart every time.
+  - [ ] When nodemon doesn't restart after every request: Check if state is different for every client. If so: perhaps use the session id and store it locally to identify a client.
+  - [ ] Give back a json or csv. Allow user to choose.
+  - [ ] Go through all comments in the code
+  - [ ] Make something that on Dev, it only retrieves 10 playlists, but on prod, retrieves all
+  - [ ] Clean up and organize code properly
+  - Decide whether to host whole site on AWS, or only spotify app.
   - Deploy to AWS. Forward from 'own' website to AWS website, preferably with own domain in the future.
     - [ ] To budget, add action to shutdown EC2 instance when budget is reached.
     - [ ] Use Elastic Beanstalk to host node.js server? [link](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/create_deploy_nodejs_express.html)
       - [ ] or [link](https://ourcodeworld.com/articles/read/977/how-to-deploy-a-node-js-application-on-aws-ec2-server)
-    - [ ] Implement lambda's?
-    - [ ] Make something that on Dev, it only retrieves 10 playlists, but on prod, retrieves all
   - [ ] Possibly filter on playlists owned by user? 
-  - [ ] Clean up and organize code properly
-  - [ ] Give back a json or csv. Allow user to choose.
-  - [ ] WIP: Show something to user regarding # of playlists that are about to be extracted, and progress of the whole process. 
-      - [ ] When nodemon doesn't restart after every request: Check if state is different for every client. If so: perhaps use the session id and store it locally to identify a client.
 - [ ] Use menu button for navigation
 - [ ] Something to track traffic
+- [ ] Implement lambda's?
 - [ ] Make something to turn .md blogs into content
 - [ ] Convert to ts. Add types.
 - [ ] Add tests
@@ -40,7 +42,7 @@ localSpotifyAppClientSecret: "INSERT_CLIENT_SECRET"
 # Changelog
 - Converted to TS due to annoying Node/JS issues in node versions.
 - Static website vs. Node.JS app: Went with Node.js: I want to learn it, and move it to TS, so just do it. It also makes this 1000 times easier and the learning more meaningfull than writing some vanilla static website that does everything itself without using NPM libraries. While at it, try out AWS or otherwise Heroku, since  you want to learn AWS anyway.
-- Implemented Socket.io as a framework to push statusupdates from server to client. The alternative was using Server Side Events (SSE). Although the use case is unidirectional and I'm not using binaries in the communication, SSE's have a limit to the number of open connections. 
+- Implemented Socket.io as a framework to push statusupdates from server to client. The alternative was using Server Side Events (SSE). Although the use case is unidirectional and I'm not using binaries in the communication, SSE's have a limit to the number of open connections.
 
 # Troubleshooting
 - During auth/login to spotify: redirect isn't working: Solution: add `http://localhost:8000/spotify-app` to the allowed redirect URI's on developer.spotify.com.
