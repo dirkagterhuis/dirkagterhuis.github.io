@@ -2,6 +2,7 @@
 - [ ] Spotify-app
     - [ ] get user input (json or csv) as param and pass it to spotify as request param and forward it to callback, if that's possible
   - [ ] When nodemon doesn't restart after every request: Check if state is different for every client. If so: perhaps use the session id and store it locally to identify a client.
+    - [ ] Issue: the state is the same every time, so if another client connects, it won't get status update messages
   - [ ] Give back a json or csv. Allow user to choose.
   - [ ] Go through all comments in the code
   - [ ] Clean up the text in the .html
