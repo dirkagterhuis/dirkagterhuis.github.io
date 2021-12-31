@@ -38,8 +38,10 @@ export async function getItemsByPlaylists(
     socketId: string
 ) {
     console.log(`Getting all tracks for ${playlists.length} playlists.`)
-    // For production release, change `10` to `playlists.length`: make something to only retrieve 10 on dev, and all in prd.
-    for (let i = 0; i < 10; i++) {
+
+    // Get all playlists for production but 10 for dev
+    const numberOfPlaylistsToGet: number = process.env.PORT ? playlists.length : 10
+    for (let i = 0; i < numberOfPlaylistsToGet; i++) {
         console.log(
             `Getting tracks for playlist #${(i + 1).toString().padStart(3, '0')} out of ${
                 playlists.length

@@ -1,6 +1,6 @@
 # To do
 - [ ] Spotify-app
-  - [ ] Properly give back the file, not as a file stored in local filesystem. Check if nodemon doesn't restart every time.
+    - [ ] get user input (json or csv) as param and pass it to spotify as request param and forward it to callback, if that's possible
   - [ ] When nodemon doesn't restart after every request: Check if state is different for every client. If so: perhaps use the session id and store it locally to identify a client.
   - [ ] Give back a json or csv. Allow user to choose.
   - [ ] Go through all comments in the code
@@ -25,8 +25,9 @@
 
 # Future features
 - [ ] Allow selection of 'own playlists only' vs. 'subscribed playlists too'. 
-- [ ] Allow selection of which fields to be retrieved
+- [ ] Allow selection of which fields to be retrieved.
 - [ ] Allow uploading of playlists to a Spotify account. 
+- [ ] Possible show the server .json or .csv as a textbox, not as a file to download.
 
 # How to
 

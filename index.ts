@@ -89,14 +89,16 @@ app.get('/spotify-app-callback', async function (req, res) {
 
     await getItemsByPlaylists(authToken, playlists, sendMessageToClient, client.socketId)
 
-    // perhaps you don't want this locally, see if you can serve a json without a file, e.g.: https://stackoverflow.com/questions/25434506/download-file-from-json-object-in-node-js
-    // instead of this, offer the file to download directly in client browser
-    fs.writeFileSync('./playlists.json', JSON.stringify(playlists, null, 2))
+    // Only do this when developing locally; you don't want this when it's a live server
+    if (port === 8000) {
+        fs.writeFileSync('./playlists.json', JSON.stringify(playlists, null, 2))
+    }
 
-    // res.redirect('/spotify-app')
-
-    // to serve a local file, but perhaps you don't want to save it on the server. Or make it unique and delete it afterwards.
-    // res.download(path.join(__dirname + '/playlists.json'))
+    const dataStr =
+        'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(playlists, null, 2))
+    io.to(client.socketId).emit('readyForDownload', {
+        body: dataStr,
+    })
 })
 
 io.on('connection', (socket) => {
