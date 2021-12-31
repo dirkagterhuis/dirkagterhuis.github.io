@@ -4,6 +4,7 @@
   - [ ] When nodemon doesn't restart after every request: Check if state is different for every client. If so: perhaps use the session id and store it locally to identify a client.
   - [ ] Give back a json or csv. Allow user to choose.
   - [ ] Go through all comments in the code
+  - [ ] Clean up the text in the .html
   - [ ] Make something that on Dev, it only retrieves 10 playlists, but on prod, retrieves all
   - [ ] Clean up and organize code properly
   - Decide whether to host whole site on AWS, or only spotify app.
