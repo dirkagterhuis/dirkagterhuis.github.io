@@ -41,11 +41,15 @@ export async function getItemsByPlaylists(
     // For production release, change `10` to `playlists.length`: make something to only retrieve 10 on dev, and all in prd.
     for (let i = 0; i < 10; i++) {
         console.log(
-            `Getting tracks for playlist #${i + 1} out of ${playlists.length}: ${playlists[i].name}`
+            `Getting tracks for playlist #${(i + 1).toString().padStart(3, '0')} out of ${
+                playlists.length
+            }: ${playlists[i].name}`
         )
         sendMessageToClient(
             socketId,
-            `Getting tracks for playlist #${i + 1} out of ${playlists.length}: ${playlists[i].name}`
+            `Getting tracks for playlist #${(i + 1).toString().padStart(3, '0')} out of ${
+                playlists.length
+            }: ${playlists[i].name}`
         )
         const playlistId = playlists[i].id
         const url = `https://api.spotify.com/v1/playlists/${playlistId}/tracks`
