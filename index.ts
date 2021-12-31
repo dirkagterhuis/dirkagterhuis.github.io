@@ -44,7 +44,7 @@ app.get('/spotify-app', function (req, res) {
     res.render(path.join(__dirname + '/public/views/spotify-app.html'), {
         showLoading: false,
     })
-    console.log(`Clients @ /spotify-app: ${JSON.stringify(clients)}`)
+    console.log(`# Clients @ /spotify-app: ${clients.length}`)
 })
 
 app.get('/spotify-app-callback', async function (req, res) {
@@ -90,9 +90,9 @@ app.get('/spotify-app-callback', async function (req, res) {
     await getItemsByPlaylists(authToken, playlists, sendMessageToClient, client.socketId)
 
     // Only do this when developing locally; you don't want this when it's a live server
-    if (port === 8000) {
-        fs.writeFileSync('./playlists.json', JSON.stringify(playlists, null, 2))
-    }
+    // if (port === 8000) {
+    //     fs.writeFileSync('./playlists.json', JSON.stringify(playlists, null, 2))
+    // }
 
     const dataStr =
         'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(playlists, null, 2))
