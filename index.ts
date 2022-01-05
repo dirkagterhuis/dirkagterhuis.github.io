@@ -7,6 +7,7 @@ import http from 'http'
 import { Server } from 'socket.io'
 import cors from 'cors'
 import path from 'path'
+import fs from 'fs'
 // can be removed if not used in any html files
 import * as ejs from 'ejs'
 import { stat } from 'fs'
@@ -50,7 +51,6 @@ app.get('/spotify-app', function (req, res) {
 
 app.get('/login', function (req, res) {
     console.log('CLICK!')
-    // TO DO: use separate attribute for sessionId vs. session id
     const sessionId: string = req.query.sessionId as string
     const state = generateState()
     const loginUrl: string = getSpotifyLoginUrl(state)
@@ -104,9 +104,9 @@ app.get('/spotify-app-callback', async function (req, res) {
     await getItemsByPlaylists(authToken, playlists, sendMessageToClient, client.socketId)
 
     // Only do this when developing locally; you don't want this when it's a live server
-    // if (port === 8000) {
-    //     fs.writeFileSync('./playlists.json', JSON.stringify(playlists, null, 2))
-    // }
+    if (port === 8000) {
+        fs.writeFileSync('./playlists.json', JSON.stringify(playlists, null, 2))
+    }
 
     const dataStr =
         'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(playlists, null, 2))
