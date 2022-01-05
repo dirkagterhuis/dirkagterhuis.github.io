@@ -30,7 +30,7 @@
             <div class="centre">
                 <form id="spotifyLogin" action="/login">
                     <input type="submit" value="Get my playlists!" class="spotify-button" />
-                    <input type="hidden" name="state" id="state" />
+                    <input type="hidden" name="sessionId" id="sessionId" />
                 </form>
             </div>
 
@@ -69,15 +69,15 @@
         let loadingMessages = document.getElementById('loadingMessages')
         let loadingMessageList = document.getElementById('loadingMessageList')
 
-        let state = sessionStorage.getItem('state')
-        if (!state) {
-            state = (Math.random() + 1).toString(36).substring(7)
-            sessionStorage.setItem('state', state)
+        let sessionId = sessionStorage.getItem('sessionId')
+        if (!sessionId) {
+            sessionId = (Math.random() + 1).toString(36).substring(7)
+            sessionStorage.setItem('sessionId', sessionId)
         }
-        socket.emit('state', {
-            body: state,
+        socket.emit('sessionId', {
+            body: sessionId,
         })
-        document.getElementById('state').value = state
+        document.getElementById('sessionId').value = sessionId
 
         socket.on('loadingMessage', function (event) {
             console.log(`MESSAGE ON CLIENT INCOMING: ${JSON.stringify(event)}`)

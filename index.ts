@@ -9,6 +9,7 @@ import cors from 'cors'
 import path from 'path'
 // can be removed if not used in any html files
 import * as ejs from 'ejs'
+import { stat } from 'fs'
 
 const app: Express = express()
 const port: string | number = process.env.PORT || 8000
@@ -18,7 +19,8 @@ const io = new Server(server) //but you need the 'server' variable because socke
 interface Client {
     socketId: string
     socket: any
-    state: string
+    sessionId: string
+    state?: string
 }
 let clients: Client[] = []
 
@@ -48,9 +50,17 @@ app.get('/spotify-app', function (req, res) {
 
 app.get('/login', function (req, res) {
     console.log('CLICK!')
-    // TO DO: use separate attribute for state vs. session id
-    const state: string = req.query.state as string
+    // TO DO: use separate attribute for sessionId vs. session id
+    const sessionId: string = req.query.sessionId as string
+    const state = generateState()
     const loginUrl: string = getSpotifyLoginUrl(state)
+    const client = clients.find((obj) => {
+        return obj.sessionId === sessionId
+    })
+    if (!client) {
+        throw new Error(`Request not coming from an active session.`)
+    }
+    client.state = state
     res.redirect(loginUrl)
 })
 
@@ -69,11 +79,17 @@ app.get('/spotify-app-callback', async function (req, res) {
     const authToken = await getAuthToken(code)
 
     // this is a bit dodgy as socket.io creating the client will race with getting the auth token
-    const client = clients.find((obj) => {
-        return obj.state === state
+    // also, ideally, you'd also get the sessionId in the callback and get the client.state from there
+    const client = clients.find((client) => {
+        return client.state === state
     })
     if (!client) {
-        throw new Error(`Request not coming from an active session.`)
+        res.redirect(
+            '/#' +
+                new URLSearchParams({
+                    error: 'state_mismatch: no active client found with received state',
+                })
+        )
     }
 
     sendMessageToClient(client.socketId, `Succesfully signed in to your Spotify Account`)
@@ -103,23 +119,23 @@ io.on('connection', (socket) => {
     console.log(`Connected`)
     console.log(`Socket Id is: ${socket.id}`)
 
-    let state: string
-    socket.on('state', function (event) {
+    let sessionId: string
+    socket.on('sessionId', function (event) {
         if (!event.body) {
-            throw new Error(`Incoming state on Server is undefined`)
+            throw new Error(`Incoming sessionId on Server is undefined`)
         }
-        state = event.body
+        sessionId = event.body
 
-        // first check if client exists already based on state
+        // first check if client exists already based on sessionId
         const matchingClients = clients.filter((client) => {
-            return client.state === state
+            return client.sessionId === sessionId
         })
         if (matchingClients.length > 1) {
-            throw new Error(`Multiple clients with the same state`)
+            throw new Error(`Multiple clients with the same sessionId`)
         }
         if (matchingClients.length === 0) {
             clients.push({
-                state,
+                sessionId,
                 socketId: socket.id,
                 socket,
             })
