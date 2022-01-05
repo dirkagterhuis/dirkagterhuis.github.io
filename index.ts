@@ -1,4 +1,4 @@
-import { loginUrl, redirect_uri, getAuthToken, state as originalState } from './src/authorization'
+import { generateState, getSpotifyLoginUrl, getAuthToken } from './src/authorization'
 import { getPlaylists, getItemsByPlaylists } from './src/spotifyApiUtils'
 
 import express from 'express'
@@ -7,7 +7,6 @@ import http from 'http'
 import { Server } from 'socket.io'
 import cors from 'cors'
 import path from 'path'
-import fs from 'fs'
 // can be removed if not used in any html files
 import * as ejs from 'ejs'
 
@@ -47,6 +46,14 @@ app.get('/spotify-app', function (req, res) {
     console.log(`# Clients @ /spotify-app: ${clients.length}`)
 })
 
+app.get('/login', function (req, res) {
+    console.log('CLICK!')
+    // TO DO: use separate attribute for state vs. session id
+    const state: string = req.query.state as string
+    const loginUrl: string = getSpotifyLoginUrl(state)
+    res.redirect(loginUrl)
+})
+
 app.get('/spotify-app-callback', async function (req, res) {
     // use 'redirect', not 'render', as to remove the code from the url
     res.redirect('/spotify-app')
@@ -58,15 +65,6 @@ app.get('/spotify-app-callback', async function (req, res) {
     const code: string = (req.query.code as string) || null
     const state = req.query.state || null
     const error = req.query.error || null
-
-    if (state !== originalState) {
-        res.redirect(
-            '/#' +
-                new URLSearchParams({
-                    error: 'state_mismatch',
-                })
-        )
-    }
 
     const authToken = await getAuthToken(code)
 
@@ -104,28 +102,46 @@ app.get('/spotify-app-callback', async function (req, res) {
 io.on('connection', (socket) => {
     console.log(`Connected`)
     console.log(`Socket Id is: ${socket.id}`)
-    clients.push({
-        socketId: socket.id,
-        socket,
-        state: originalState,
+
+    let state: string
+    socket.on('state', function (event) {
+        if (!event.body) {
+            throw new Error(`Incoming state on Server is undefined`)
+        }
+        state = event.body
+
+        // first check if client exists already based on state
+        const matchingClients = clients.filter((client) => {
+            return client.state === state
+        })
+        if (matchingClients.length > 1) {
+            throw new Error(`Multiple clients with the same state`)
+        }
+        if (matchingClients.length === 0) {
+            clients.push({
+                state,
+                socketId: socket.id,
+                socket,
+            })
+        } else {
+            matchingClients[0].socket = socket
+            matchingClients[0].socketId = socket.id
+        }
     })
 
-    // don't throw away yet depending on whether you want to identify users based on the (unique?) state
-    // io.to(socket.id).emit('sessionId', {
-    //     body: sessionId,
-    // })
-
+    // clear client after 1 hour
     socket.on('disconnect', () => {
         console.log('user disconnected')
-        clients = clients.filter(function (client) {
-            return client.socketId !== socket.id
-        })
+        setTimeout(function () {
+            try {
+                clients = clients.filter(function (client) {
+                    return client.socketId !== socket.id
+                })
+            } catch (error) {
+                console.log(`Failed to remove client after timeout; socket Id: ${socket.id}`)
+            }
+        }, 3600000)
     })
-})
-
-app.get('/login', function (req, res) {
-    console.log('CLICK!')
-    res.redirect(loginUrl)
 })
 
 app.get('/weather-app', function (req, res) {

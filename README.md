@@ -3,6 +3,24 @@
     - [ ] get user input (json or csv) as param and pass it to spotify as request param and forward it to callback, if that's possible
   - [ ] When nodemon doesn't restart after every request: Check if state is different for every client. If so: perhaps use the session id and store it locally to identify a client.
     - [ ] Issue: the state is the same every time, so if another client connects, it won't get status update messages
+      - [ ] Also check with spotify docs or the internet whether state should be unique -> I think it should be. Store it with client? -> but client doesn't persist a redirect from spotify app -> spotify auth -> redirect -> but use local storage, not session
+      - [ ] Idea: set timeout of like 30 minutes before client is removed? And/Or after download, remove client again. Or use a database... but i don't want to go there. If you do this, mention it in html website: "I don't want to store this in a database, which is why your session is cleared after X minutes". 
+      - [ ] and/Or store state on client side.
+      - [ ] --> 
+        - [ ] Use Cache: Redis or node-cache, or session memory with array of objects but don't forget to clear it. Also store state on client side. 
+        - [ ] Write out scenario's:
+          - [ ] Socket connects first time, without State in session storage. Create state. If possible, only after login. 
+            - [ ] Socket connects with state in session storage, not on auth redirect -> refresh state. -> not really a different scenario than above.
+          - [ ] Socket reconnects with new Id after authentication, with State in session storage -> find existing client by State, update socked Id. 
+          - [ ] Remove Client after success or timeout: 60 m.
+          - [ ] ---> what you're looking for is session management for node/express/socket io 
+            - [ ] Gebleven bij: ik ben ver, maar krijg geen req params als ik /login call, WAAROM? Het werkt wel als ik 'hard' naar bijv `http://localhost:8000/login?state=rgxr3` ga... dan moet het in die html js zitten die de form action zet??
+            - [ ] als je echt niet verder komt: 
+              - [ ] session store: 
+                - [ ] https://www.section.io/engineering-education/session-management-in-nodejs-using-expressjs-and-express-session/
+                - [ ] https://stackoverflow.com/questions/25532692/how-to-share-sessions-with-socket-io-1-x-and-express-4-x
+              - [ ] Redis: https://stackoverflow.com/questions/41985182/redisstore-ignores-host-and-port-fields
+              - [ ] is it a bad idea to have client set the state? nb you can still rename state to session id and use a 'server only' state between spotify and server
   - [ ] Give back a json or csv. Allow user to choose.
   - [ ] Go through all comments in the code
   - [ ] Clean up the text in the .html
@@ -20,7 +38,7 @@
 - [ ] Make something to turn .md blogs into content
 - [ ] Convert to ts. Add types.
 - [ ] Add tests
-- [ ] cookie notification?
+- [ ] cookie notification? Only needed if you track users.
 - [ ] Make site available as both static (github pages) as Node.js app using Express. Something with the index.html embedding the /public/views/index.html, but then with all refs working. Try and determine whether it's static or not, and then serve the correct content accordingly, with the right references. Or: use a view engine and move views to root dir, and update refs. Ideally end op with only 1 views dir and 1 static index.html, referencing the views.
   - Converted website to work both as a static website, and as a Node.JS Express app, such that the website works from Github Pages until it's pushed to AWS. Had some issues with hosting locally using `ws` vs. `nodemon`, but Nodemon definitely had a preference in ease of development as you don't have to restart the server on every change. It did however require the whole app to work as a Node.JS Express app, since you run `nodemon index.ts` and got served by the app, while `ws` just rendered the `index.html` in root.-> Didn't work yet.
 
