@@ -1,9 +1,13 @@
 # To do
 - [ ] Spotify-app
+  - [ ] Move everything to separate spotifybackup repo
   - [ ] Allow user to choose json or csv: get user input (json or csv) as param and pass it to spotify as request param and forward it to callback, if that's possible
+    - [ ] add tooltips explaining about the filetypes
   - [ ] Clean up the text in the .html
+    - [ ] vermeld: nothing is stored, nothing is tracked
   - [ ] Go through all comments in the code
   - [ ] Clean up and organize code properly: more modular.
+    - [ ] double check: do you need to store whole socket, or just id?
   - Decide whether to host whole site on AWS, or only spotify app.
   - Deploy to AWS. Forward from 'own' website to AWS website, preferably with own domain in the future.
     - [ ] To budget, add action to shutdown EC2 instance when budget is reached.

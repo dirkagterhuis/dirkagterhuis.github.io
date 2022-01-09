@@ -27,9 +27,25 @@
                 download all your playlists and upload them to your newly created user account.
             </p>
 
-            <div class="centre">
+            <div>
                 <form id="spotifyLogin" action="/login">
-                    <input type="submit" value="Get my playlists!" class="spotify-button" />
+                    <div>
+                        <p>
+                            Please select in which file format you would like to retrieve your
+                            playlists:
+                        </p>
+                        <div class="centre">
+                            <input type="radio" id="json" name="fileType" value="json" checked />
+                            <label for="json">json</label>
+                            <input type="radio" id="csv" name="fileType" value="csv" />
+                            <label for="csv">csv</label>
+                        </div>
+                    </div>
+                    <!-- for an empty line between, lazyness -->
+                    <div class="empty-div"></div>
+                    <div class="centre">
+                        <input type="submit" value="Get my playlists!" class="spotify-button" />
+                    </div>
                     <!-- magic: this will be passed as query param in the url: -->
                     <input type="hidden" name="sessionId" id="sessionId" />
                 </form>
