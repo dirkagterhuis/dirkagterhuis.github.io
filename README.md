@@ -2,7 +2,12 @@
 - [ ] Spotify-app
   - [ ] Move everything to separate spotifybackup repo
   - [ ] Allow user to choose json or csv: get user input (json or csv) as param and pass it to spotify as request param and forward it to callback, if that's possible
+    - [ ] HIER GEBLEVEN: accept it in BE and process CSV
+      - [ ] er lijkt een soort error te zijn met de opgeslagen `spotify-playlists.json`: van 118 playlists geeft hij aan geen tracks te hebben, van 10 wel, en er zijn er 128 in totaal. Terwijl de csv conversion niks met de local playlist te maken zou meoten hebben? En er is natuurlijk die limiet van 10 opgehaalde playlists. Waar gaat dit mis?
     - [ ] add tooltips explaining about the filetypes
+    - [ ] store state of fileType selection in sessionstorage or pass it back to client, now it goes back to default after redirect
+    - [ ] check csv separation character or escape ; or , in playlist/track names
+    - [ ] For playlists without items, log the playlist name but not the items in csv, with a message like 'export of playlist X did not contain items'. NB for example `37i9dQZF1EuByQ9lkv31mS` check the spotify back end if it contains something else
   - [ ] Clean up the text in the .html
     - [ ] vermeld: nothing is stored, nothing is tracked
   - [ ] Go through all comments in the code
@@ -13,6 +18,7 @@
     - [ ] To budget, add action to shutdown EC2 instance when budget is reached.
     - [ ] Use Elastic Beanstalk to host node.js server? [link](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/create_deploy_nodejs_express.html)
       - [ ] or [link](https://ourcodeworld.com/articles/read/977/how-to-deploy-a-node-js-application-on-aws-ec2-server)
+  - [ ] test it with podcast playlists
 - [ ] Use menu button for navigation
 - [ ] Something to track traffic
 - [ ] Implement lambda's?
@@ -31,6 +37,9 @@
 - [ ] Use proper session management with e.g. Redis or node-cache to store active sessiens, get session id from server, not client. Pro: get session id in every express request, and more secure. Con: will have to use cookies?
   - [ ] https://www.section.io/engineering-education/session-management-in-nodejs-using-expressjs-and-express-session/
   - [ ] https://stackoverflow.com/questions/25532692/how-to-share-sessions-with-socket-io-1-x-and-express-4-x
+
+# Known issues
+- Sometimes, a given track of a playlist may be `null`. No idea why, but these are skipped.
 
 # How to
 

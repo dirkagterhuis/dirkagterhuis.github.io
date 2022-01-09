@@ -20,7 +20,9 @@ interface Client {
     socketId: string
     sessionId: string
     state?: string
+    fileType?: FileType
 }
+type FileType = 'json' | 'csv'
 let clients: Client[] = []
 
 // Setup static directory to serve
@@ -59,6 +61,7 @@ app.get('/login', function (req, res) {
         throw new Error(`Request not coming from an active session.`)
     }
     client.state = state
+    client.fileType = req.query.fileType as FileType
     res.redirect(loginUrl)
 })
 
@@ -106,12 +109,72 @@ app.get('/spotify-app-callback', async function (req, res) {
         fs.writeFileSync('./playlists.json', JSON.stringify(playlists, null, 2))
     }
 
-    const dataStr =
-        'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(playlists, null, 2))
-    io.to(client.socketId).emit('readyForDownload', {
-        body: dataStr,
+    const dataStr = io.to(client.socketId).emit('readyForDownload', {
+        body: generateReturnFile(playlists, client.fileType),
     })
 })
+
+function generateReturnFile(playlists, fileType: FileType): string {
+    switch (fileType) {
+        case 'json':
+            return `data:text/json;charset=utf-8, ${encodeURIComponent(
+                JSON.stringify(playlists, null, 2)
+            )}`
+        case 'csv':
+            return `date:text/csv;charset=utf-8, ${csvFromJSON(playlists)}`
+        default:
+            throw new Error(`Unexpected fileType: ${fileType}`)
+    }
+}
+
+function csvFromJSON(playlists): string {
+    let ret: string = `
+        playlist id,
+        playlist Name,
+        playlist owner name,
+        playlist owner type,
+        playlist is collaborative,
+        playlist description,
+        track id,track name,
+        track artist name(s),
+        track album name
+    `
+    for (let i = 0; i < playlists.length; i++) {
+        const playlist = playlists[i]
+        const items = playlist.items
+        if (!items) {
+            console.log(`Undefined items for playlist ${playlist.id}`)
+            continue
+        }
+        // console.log(`Playlist: ${playlist.id}`)
+        // console.log(`items: ${JSON.stringify(items)}`)
+        for (let j = 0; j < items.length; j++) {
+            // console.log(`item: ${JSON.stringify(items[j])}`)
+            const track = items[j].track
+            if (track === null) {
+                continue
+            }
+            // console.log(`track: ${JSON.stringify(track)}`)
+            const artists = track.artists
+            let artistNames: string = ''
+            for (let k = 0; k < artists.length; k++) {
+                artistNames += artists[k].name as string
+            }
+            ret += `\n,
+                ${playlist.id},
+                ${playlist.name},
+                ${playlist.owner.display_name},
+                ${playlist.owner.type},
+                ${String(playlist.collaborative)},
+                ${playlist.description},
+                ${track.id},
+                ${track.name},
+                ${artistNames},
+                ${track.album.name}`
+        }
+    }
+    return ret
+}
 
 io.on('connection', (socket) => {
     console.log(`Connected`)
