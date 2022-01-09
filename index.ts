@@ -10,7 +10,6 @@ import path from 'path'
 import fs from 'fs'
 // can be removed if not used in any html files
 import * as ejs from 'ejs'
-import { stat } from 'fs'
 
 const app: Express = express()
 const port: string | number = process.env.PORT || 8000
@@ -19,7 +18,6 @@ const io = new Server(server) //but you need the 'server' variable because socke
 
 interface Client {
     socketId: string
-    socket: any
     sessionId: string
     state?: string
 }
@@ -137,10 +135,8 @@ io.on('connection', (socket) => {
             clients.push({
                 sessionId,
                 socketId: socket.id,
-                socket,
             })
         } else {
-            matchingClients[0].socket = socket
             matchingClients[0].socketId = socket.id
         }
     })
